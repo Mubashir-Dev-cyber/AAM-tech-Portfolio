@@ -122,8 +122,17 @@ export const about = {
 
 // Photos live in the `public` folder. `role` and `bio` are optional and only shown when set.
 export const team = [
-  { name: 'Muhammad Mubashir', photo: '/mubashir.webp' },
-  { name: 'Abdal Niazi', photo: '/abdal.webp' },
+  // TODO: rewrite these placeholder descriptions in your own words
+  {
+    name: 'Muhammad Mubashir',
+    photo: '/mubashir.webp',
+    bio: 'Part of the AAM tech team, helping clients turn their ideas into fast, modern websites that grow their business.',
+  },
+  {
+    name: 'Abdal Niazi',
+    photo: '/abdal.webp',
+    bio: 'Part of the AAM tech team, focused on building reliable, well-crafted web experiences for clients around the world.',
+  },
 ]
 
 export const values = [
