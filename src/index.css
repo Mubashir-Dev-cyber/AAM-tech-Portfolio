@@ -570,7 +570,9 @@ main, .footer { position: relative; z-index: 1; }
 .about__mission { padding: 2.25rem; }
 .about__mission-text { font: 600 1.25rem/1.5 var(--display); color: var(--text); }
 .about__highlights { justify-content: space-between; gap: 1.5rem; margin-top: 2rem; padding-top: 1.5rem; }
-.team__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+.team__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 280px)); gap: 1.5rem; justify-content: center; }
+/* Real photos get a larger frame than the initials avatar */
+.team__avatar--photo { width: 150px; height: 150px; object-position: center 20%; border: 3px solid rgba(109, 93, 252, 0.5); }
 .team__card { text-align: center; }
 .team__avatar {
   display: grid;

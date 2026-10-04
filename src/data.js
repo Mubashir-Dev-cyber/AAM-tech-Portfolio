@@ -120,11 +120,9 @@ export const about = {
   ],
 }
 
-// TODO: replace with your real team. Add `photo: '/path.jpg'` to show a picture instead of initials.
+// Photos live in the `public` folder. `role` and `bio` are optional and only shown when set.
 export const team = [
-  { name: 'Your Name', role: 'Founder & Lead Developer', bio: 'Leads every build and makes sure your site is fast, secure, and built to grow.' },
-  { name: 'Team Member', role: 'UI/UX Designer', bio: 'Turns your brand into clean layouts that are easy and enjoyable to use.' },
-  { name: 'Team Member', role: 'Project Manager', bio: 'Keeps your project on schedule and is your go-to contact at every step.' },
+  { name: 'Muhammad Mubashir', photo: '/mubashir.webp' },
 ]
 
 export const values = [

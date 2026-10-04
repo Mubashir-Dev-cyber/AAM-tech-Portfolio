@@ -64,16 +64,16 @@ export default function AboutPage() {
           />
           <div className="team__grid">
             {team.map((m, i) => (
-              <Reveal key={`${m.role}-${i}`} index={i}>
+              <Reveal key={`${m.name}-${i}`} index={i}>
                 <TiltCard className="card team__card">
                   {m.photo ? (
-                    <img className="team__avatar" src={m.photo} alt="" />
+                    <img className="team__avatar team__avatar--photo" src={m.photo} alt={m.name} />
                   ) : (
                     <div className="team__avatar" aria-hidden="true">{initials(m.name)}</div>
                   )}
                   <h3>{m.name}</h3>
-                  <p className="team__role">{m.role}</p>
-                  <p>{m.bio}</p>
+                  {m.role && <p className="team__role">{m.role}</p>}
+                  {m.bio && <p>{m.bio}</p>}
                 </TiltCard>
               </Reveal>
             ))}
