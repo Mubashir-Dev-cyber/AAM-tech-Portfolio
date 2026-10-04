@@ -5,7 +5,7 @@ export const company = {
   tagline: 'We build digital experiences that grow businesses.',
   intro:
     'AAM tech is a technology and software development company helping businesses, startups, and organizations build a strong digital presence with modern, responsive, and user-friendly websites.',
-  email: 'hello@aamtech.com', // TODO: replace with your real contact email
+  email: 'am.pk.tech@gmail.com',
   // Country code + number, digits only (no +, spaces or leading 0)
   whatsapp: '923001234567', // TODO: replace with your real WhatsApp number
   whatsappMessage: "Hi AAM tech, I'd like to discuss a project.",
