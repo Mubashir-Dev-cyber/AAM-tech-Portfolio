@@ -1,15 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
-// 'light' | 'dark' | 'system' — system follows the device setting
-const KEY = 'aam-theme'
+// 'light' | 'dark' | 'system' — system follows the device setting.
+// New visitors start in dark; only a choice made with the switch is saved.
+const KEY = 'aam-theme-choice'
 const query = typeof window !== 'undefined' ? window.matchMedia('(prefers-color-scheme: light)') : null
 
 export function readChoice() {
   try {
     const v = localStorage.getItem(KEY)
-    return v === 'light' || v === 'dark' || v === 'system' ? v : 'system'
+    return v === 'light' || v === 'dark' || v === 'system' ? v : 'dark'
   } catch {
-    return 'system'
+    return 'dark'
   }
 }
 
@@ -20,16 +21,21 @@ function applyTheme(choice) {
 }
 
 export default function useTheme() {
-  const [choice, setChoice] = useState(readChoice)
+  const [choice, setChoiceState] = useState(readChoice)
 
   useEffect(() => {
     applyTheme(choice)
+  }, [choice])
+
+  // Remember the visitor's pick
+  const setChoice = useCallback((next) => {
+    setChoiceState(next)
     try {
-      localStorage.setItem(KEY, choice)
+      localStorage.setItem(KEY, next)
     } catch {
       // Private windows can block storage — the choice then lasts for this visit only
     }
-  }, [choice])
+  }, [])
 
   // While "System" is selected, follow the device switching light/dark
   useEffect(() => {

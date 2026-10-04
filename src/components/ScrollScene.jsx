@@ -4,6 +4,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Float, MeshDistortMaterial, Points, PointMaterial } from '@react-three/drei'
 import { MathUtils } from 'three'
 import useScrollStage, { scrollState } from '../hooks/useScrollStage.js'
+import Ripple, { rippleEnabled } from './Ripple.jsx'
 
 const PURPLE = '#6d5dfc'
 const BLUE = '#36c2f6'
@@ -324,6 +325,7 @@ export default function ScrollScene() {
     : pathname.startsWith('/contact') ? LAYOUTS.contact
     : LAYOUTS.home
   useScrollStage(layout.ids)
+  const light = useLightTheme()
 
   // Match the old hero-sized canvas so the hero is framed exactly as before,
   // but never shorter than the screen so the 3D fills every section.
@@ -353,6 +355,7 @@ export default function ScrollScene() {
         <Particles count={isMobile ? 600 : 1500} />
         <WarpField count={isMobile ? 250 : 600} layout={layout} />
         <Backdrop layout={layout} />
+        {rippleEnabled && <Ripple light={light} />}
       </Canvas>
     </div>
   )

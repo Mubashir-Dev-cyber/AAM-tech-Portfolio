@@ -8,7 +8,6 @@ import Process from './components/Process.jsx'
 import ContactPage from './pages/ContactPage.jsx'
 import Footer from './components/Footer.jsx'
 import ScrollToTop from './components/ScrollToTop.jsx'
-import CursorTrail from './components/CursorTrail.jsx'
 import Work from './pages/Work.jsx'
 
 // three.js is large — load it in its own chunk so the text renders first
@@ -36,7 +35,6 @@ export default function App() {
         <ScrollScene />
       </Suspense>
       <ScrollToTop />
-      <CursorTrail />
       <Navbar />
       <main>
         <Routes>
