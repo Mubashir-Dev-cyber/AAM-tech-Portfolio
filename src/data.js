@@ -105,6 +105,28 @@ export const process = [
   { step: '04', icon: '↗', title: 'Launch & Support', text: 'We deploy, test across devices, and stay on hand for updates and growth.' },
 ]
 
+// About page. TODO: rewrite the story and mission in your own words.
+export const about = {
+  story: [
+    'AAM tech started with a simple idea: every business deserves a website that works as hard as they do. Too many small companies were stuck with slow, outdated sites — or no site at all.',
+    'Today we design and build websites and web apps for businesses, startups, and organizations around the world. We keep things personal: you talk directly to the people building your project, from the first call to launch day and beyond.',
+  ],
+  mission:
+    'To give every client a fast, beautiful, and easy-to-manage online presence that brings in real customers — with honest pricing and no technical headaches.',
+  highlights: [
+    { value: 'Worldwide', label: 'Remote clients' },
+    { value: '24h', label: 'Reply time' },
+    { value: '100%', label: 'Custom builds' },
+  ],
+}
+
+// TODO: replace with your real team. Add `photo: '/path.jpg'` to show a picture instead of initials.
+export const team = [
+  { name: 'Your Name', role: 'Founder & Lead Developer', bio: 'Leads every build and makes sure your site is fast, secure, and built to grow.' },
+  { name: 'Team Member', role: 'UI/UX Designer', bio: 'Turns your brand into clean layouts that are easy and enjoyable to use.' },
+  { name: 'Team Member', role: 'Project Manager', bio: 'Keeps your project on schedule and is your go-to contact at every step.' },
+]
+
 export const values = [
   { icon: '▣', title: 'Mobile-first', text: 'Responsive design that looks sharp on every phone, tablet, and desktop.' },
   { icon: '{ }', title: 'Clean code', text: 'Well-structured, maintainable code that is easy to grow later.' },

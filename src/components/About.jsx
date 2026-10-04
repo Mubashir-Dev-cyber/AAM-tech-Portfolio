@@ -13,14 +13,9 @@ export default function About() {
           <p>
             {company.name} is a technology and software development company. We work
             closely with businesses, startups, and organizations to turn ideas into
-            websites and digital products that look great, work flawlessly, and
-            deliver real results.
+            websites and digital products that look great and deliver real results.
           </p>
-          <p>
-            Every project is tailored — no cookie-cutter templates. We focus on
-            what your customers need so your site becomes a tool that grows your business.
-          </p>
-          <Link to="/contact" className="btn about__cta">Start your project →</Link>
+          <Link to="/about" className="btn about__cta">More about us →</Link>
         </Reveal>
 
         <div className="about__grid">

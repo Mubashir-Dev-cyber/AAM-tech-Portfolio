@@ -7,8 +7,13 @@ import ThemeToggle from './ThemeToggle.jsx'
 // Section links point at the home page, so they work from any page
 const links = [
   { to: '/#services', label: 'Services' },
-  { to: '/#about', label: 'About' },
   { to: '/#process', label: 'Process' },
+]
+
+// Links to their own pages, highlighted while you're on them
+const pages = [
+  { to: '/about', label: 'About' },
+  { to: '/work', label: 'Work' },
 ]
 
 export default function Navbar() {
@@ -47,13 +52,16 @@ export default function Navbar() {
               {l.label}
             </Link>
           ))}
-          <NavLink
-            to="/work"
-            className={({ isActive }) => (isActive ? 'is-active' : undefined)}
-            onClick={() => setOpen(false)}
-          >
-            Work
-          </NavLink>
+          {pages.map((p) => (
+            <NavLink
+              key={p.to}
+              to={p.to}
+              className={({ isActive }) => (isActive ? 'is-active' : undefined)}
+              onClick={() => setOpen(false)}
+            >
+              {p.label}
+            </NavLink>
+          ))}
           <ThemeToggle value={theme} onChange={setTheme} />
           <NavLink to="/contact" className="btn btn--small nav__cta--menu" onClick={() => setOpen(false)}>
             Contact Us

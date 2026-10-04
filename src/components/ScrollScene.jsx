@@ -60,6 +60,13 @@ const LAYOUTS = {
     warp: [0, 0.25],
     dim: [0, 1],
   },
+  about: {
+    ids: ['top', 'story', 'team'],
+    poses: [POSES[0], POSES[3], POSES[4]],
+    camera: [7, 6.6, 6.6],
+    warp: [0, 0, 0],
+    dim: [0, 1, 1],
+  },
   contact: {
     ids: ['top', 'contact'],
     poses: [POSES[0], POSES[5]],
@@ -319,9 +326,10 @@ function Shapes({ layout }) {
 }
 
 export default function ScrollScene() {
-  // Work and Contact have their own choreography; every other route uses the home one
+  // About, Work and Contact have their own choreography; every other route uses the home one
   const { pathname } = useLocation()
-  const layout = pathname.startsWith('/work') ? LAYOUTS.work
+  const layout = pathname.startsWith('/about') ? LAYOUTS.about
+    : pathname.startsWith('/work') ? LAYOUTS.work
     : pathname.startsWith('/contact') ? LAYOUTS.contact
     : LAYOUTS.home
   useScrollStage(layout.ids)

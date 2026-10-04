@@ -566,6 +566,34 @@ main, .footer { position: relative; z-index: 1; }
   font-size: 0.9rem;
 }
 
+/* About page: mission card, team and closing call to action */
+.about__mission { padding: 2.25rem; }
+.about__mission-text { font: 600 1.25rem/1.5 var(--display); color: var(--text); }
+.about__highlights { justify-content: space-between; gap: 1.5rem; margin-top: 2rem; padding-top: 1.5rem; }
+.team__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+.team__card { text-align: center; }
+.team__avatar {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 1.25rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: #fff;
+  font: 700 1.6rem var(--display);
+  object-fit: cover;
+  box-shadow: 0 12px 30px -10px rgba(109, 93, 252, 0.6);
+}
+.team__card h3 { margin-bottom: 0.25rem; }
+.team__role { margin-bottom: 0.75rem !important; color: var(--primary-2); font-weight: 600; font-size: 0.9rem; }
+.about__closing { margin-top: 5rem; text-align: center; }
+[data-theme="light"] .about__mission-text { color: #14172a; }
+@media (max-width: 720px) {
+  .about__mission { padding: 1.5rem; }
+  .about__highlights { justify-content: flex-start; }
+}
+
 /* Contact form: honeypot field and send result */
 .form__trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .form .btn:disabled { opacity: 0.7; cursor: progress; }

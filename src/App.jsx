@@ -9,6 +9,7 @@ import ContactPage from './pages/ContactPage.jsx'
 import Footer from './components/Footer.jsx'
 import ScrollToTop from './components/ScrollToTop.jsx'
 import Work from './pages/Work.jsx'
+import AboutPage from './pages/AboutPage.jsx'
 import WhatsAppButton from './components/WhatsAppButton.jsx'
 
 // three.js is large — load it in its own chunk so the text renders first
@@ -40,6 +41,7 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/work" element={<Work />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
