@@ -6,6 +6,9 @@ export const company = {
   intro:
     'AAM tech is a technology and software development company helping businesses, startups, and organizations build a strong digital presence with modern, responsive, and user-friendly websites.',
   email: 'hello@aamtech.com', // TODO: replace with your real contact email
+  // Country code + number, digits only (no +, spaces or leading 0)
+  whatsapp: '923001234567', // TODO: replace with your real WhatsApp number
+  whatsappMessage: "Hi AAM tech, I'd like to discuss a project.",
   location: 'Remote — working with clients worldwide',
   socials: [
     { label: 'GitHub', href: 'https://github.com/' },
@@ -13,6 +16,10 @@ export const company = {
     { label: 'Instagram', href: 'https://www.instagram.com/' },
   ],
 }
+
+// Opens a WhatsApp chat with the greeting pre-filled (app on phones, WhatsApp Web on desktop)
+export const whatsappLink = () =>
+  `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(company.whatsappMessage)}`
 
 export const stats = [
   { value: '100%', label: 'Responsive builds' },
