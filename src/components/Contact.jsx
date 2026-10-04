@@ -10,17 +10,36 @@ const nextSteps = [
 ]
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [form, setForm] = useState({ name: '', email: '', message: '', _gotcha: '' })
+  const [status, setStatus] = useState('idle') // 'idle' | 'sending' | 'sent' | 'error'
 
   const update = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
-  // Opens the visitor's email client with the message pre-filled.
-  // Swap this for a form service (e.g. Formspree) or your own API if you prefer.
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
-    const subject = encodeURIComponent(`Project enquiry from ${form.name}`)
-    const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${form.email})`)
-    window.location.href = `mailto:${company.email}?subject=${subject}&body=${body}`
+
+    // No Formspree form yet: open the visitor's email client with the message pre-filled
+    if (!company.formspreeId) {
+      const subject = encodeURIComponent(`Project enquiry from ${form.name}`)
+      const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${form.email})`)
+      window.location.href = `mailto:${company.email}?subject=${subject}&body=${body}`
+      return
+    }
+
+    // Formspree emails the message to us; the visitor's address becomes the reply-to
+    setStatus('sending')
+    try {
+      const res = await fetch(`https://formspree.io/f/${company.formspreeId}`, {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, _subject: `Project enquiry from ${form.name}` }),
+      })
+      if (!res.ok) throw new Error(`Formspree responded ${res.status}`)
+      setForm({ name: '', email: '', message: '', _gotcha: '' })
+      setStatus('sent')
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
@@ -64,7 +83,29 @@ export default function Contact() {
             Project details
             <textarea name="message" rows="5" value={form.message} onChange={update} required placeholder="What would you like to build?" />
           </label>
-          <button className="btn" type="submit">Send message</button>
+          {/* Hidden from people; bots that fill it in are dropped by Formspree */}
+          <input
+            type="text"
+            name="_gotcha"
+            value={form._gotcha}
+            onChange={update}
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="form__trap"
+          />
+          <button className="btn" type="submit" disabled={status === 'sending'}>
+            {status === 'sending' ? 'Sending…' : 'Send message'}
+          </button>
+          <p className={`form__status form__status--${status}`} role="status" aria-live="polite">
+            {status === 'sent' && "Thanks! Your message has been sent — we'll reply within 24 hours."}
+            {status === 'error' && (
+              <>
+                Something went wrong. Please email us at <a href={`mailto:${company.email}`}>{company.email}</a> or
+                message us on WhatsApp.
+              </>
+            )}
+          </p>
         </Reveal>
       </div>
     </section>
