@@ -6,8 +6,9 @@ export const company = {
   intro:
     'AAM tech is a technology and software development company helping businesses, startups, and organizations build a strong digital presence with modern, responsive, and user-friendly websites.',
   email: 'am.pk.tech@gmail.com',
-  // Contact form delivery. Until this is set, "Send message" opens the visitor's email app instead.
-  formspreeId: '', // TODO: paste your Formspree form ID (the part after formspree.io/f/)
+  // Contact form delivery via Formspree (the part after formspree.io/f/).
+  // If this is left empty, "Send message" opens the visitor's email app instead.
+  formspreeId: 'mjygblwl',
   // Country code + number, digits only (no +, spaces or leading 0)
   whatsapp: '923001234567', // TODO: replace with your real WhatsApp number
   whatsappMessage: "Hi AAM tech, I'd like to discuss a project.",
