@@ -126,7 +126,7 @@ export const team = [
   {
     name: 'Muhammad Mubashir',
     photo: '/mubashir.webp',
-    bio: 'Part of the AAM tech team, helping clients turn their ideas into fast, modern websites that grow their business.',
+    bio: 'Part of the AAM tech team, turning client ideas into fast, polished websites and caring about every detail from the first sketch to launch day.',
   },
   {
     name: 'Abdal Niazi',
