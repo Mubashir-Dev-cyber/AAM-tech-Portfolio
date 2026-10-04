@@ -123,6 +123,7 @@ export const about = {
 // Photos live in the `public` folder. `role` and `bio` are optional and only shown when set.
 export const team = [
   { name: 'Muhammad Mubashir', photo: '/mubashir.webp' },
+  { name: 'Abdal Niazi', photo: '/abdal.webp' },
 ]
 
 export const values = [
