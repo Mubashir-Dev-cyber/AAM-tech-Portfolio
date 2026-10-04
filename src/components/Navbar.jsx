@@ -12,7 +12,7 @@ const links = [
 
 // Links to their own pages, highlighted while you're on them
 const pages = [
-  { to: '/about', label: 'About' },
+  { to: '/about', label: 'About Us' },
   { to: '/work', label: 'Work' },
 ]
 
