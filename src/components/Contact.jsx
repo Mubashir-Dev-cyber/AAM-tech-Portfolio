@@ -2,6 +2,12 @@ import { useState } from 'react'
 import { company } from '../data.js'
 import Reveal from './Reveal.jsx'
 
+const nextSteps = [
+  { title: 'We reply within 24 hours', text: 'A real person reads every message and gets back to you.' },
+  { title: 'A free discovery call', text: 'We talk through your goals, audience and must-haves.' },
+  { title: 'Proposal & quote', text: 'A clear plan, timeline and fixed price — no surprises.' },
+]
+
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
 
@@ -20,12 +26,18 @@ export default function Contact() {
     <section className="section" id="contact">
       <div className="container contact">
         <Reveal>
-          <p className="eyebrow">Contact</p>
-          <h2>Let's build something great together</h2>
-          <p>
-            Tell us about your project and we'll get back to you with ideas,
-            a timeline, and a quote.
-          </p>
+          <h2>What happens next</h2>
+          <ol className="contact__steps">
+            {nextSteps.map((s, i) => (
+              <li key={s.title}>
+                <span className="contact__step-num">{i + 1}</span>
+                <div>
+                  <h3>{s.title}</h3>
+                  <p>{s.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
           <ul className="contact__info">
             <li><span>Email</span><a href={`mailto:${company.email}`}>{company.email}</a></li>
             <li><span>Location</span>{company.location}</li>

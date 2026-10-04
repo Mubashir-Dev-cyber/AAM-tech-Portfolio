@@ -1,11 +1,13 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Float, MeshDistortMaterial, Points, PointMaterial } from '@react-three/drei'
 import { MathUtils } from 'three'
-import useScrollStage, { scrollState, STAGE_COUNT } from '../hooks/useScrollStage.js'
+import useScrollStage, { scrollState } from '../hooks/useScrollStage.js'
 
 const PURPLE = '#6d5dfc'
 const BLUE = '#36c2f6'
+const STAR_LIGHT = '#3b3f8f'
 const CAMERA_Z = 7
 const FOV = 50
 
@@ -21,9 +23,8 @@ function Drift({ children, ...props }) {
 }
 
 /*
- * Scroll choreography. One row per section (hero, services, work, about,
- * process, contact); one [x, y, z, scale] entry per shape, in shape order:
- * knot (right), blob (left), icosahedron (right), torus (left).
+ * Scroll choreography. One row per section; one [x, y, z, scale] entry per shape,
+ * in shape order: knot (right), blob (left), icosahedron (right), torus (left).
  * x is in "edge" units (1 = right edge of the screen). Every shape stays on
  * its own side so the group drifts down the page together.
  * Row 0 is the hero layout and must stay exactly as designed.
@@ -38,25 +39,62 @@ const POSES = [
   [[0.85, 1.3, -6, 1.5], [-0.85, -1.4, -6, 1.4], [0.75, -2.3, -6, 1.8], [-0.75, 2.2, -6, 1.6]], // process: corners, shifted
   [[0.8, 1.9, -6, 1.5], [-0.85, -1.8, -6, 1.4], [0.85, -1.8, -6, 1.8], [-0.75, 2.0, -6, 1.6]], // contact: corners
 ]
-// Camera distance, warp-star strength and backdrop dimming per section
-const CAMERA = [7, 6.4, 6.8, 7, 6.6, 7]
-const WARP = [0, 0.5, 0.25, 0, 0, 0]
-const DIM = [0, 0, 0, 1, 1, 1]
+
+// Each page has its own sections (ids), and per section: shape poses, camera
+// distance, warp-star strength and backdrop dimming. Work and Contact have their
+// own pages, so the home layout skips those rows. Work and Contact each get a
+// two-stage arrangement: the page header, then the content with the shapes behind it.
+const LAYOUTS = {
+  home: {
+    ids: ['top', 'services', 'about', 'process'],
+    poses: [POSES[0], POSES[1], POSES[3], POSES[4]],
+    camera: [7, 6.4, 7, 6.6],
+    warp: [0, 0.5, 0, 0],
+    dim: [0, 0, 1, 1],
+  },
+  work: {
+    ids: ['top', 'work'],
+    poses: [POSES[0], POSES[2]],
+    camera: [7, 6.8],
+    warp: [0, 0.25],
+    dim: [0, 1],
+  },
+  contact: {
+    ids: ['top', 'contact'],
+    poses: [POSES[0], POSES[5]],
+    camera: [7, 7],
+    warp: [0, 0],
+    dim: [0, 1],
+  },
+}
+
 // Radians of [x, y] rotation added per section scrolled. Right-side shapes turn
 // one way and left-side shapes the other, like gears.
 const SPIN = [[0.5, 1.4], [-0.3, -1.0], [0.9, 1.1], [-0.8, -1.2]]
 const SIDE = [1, -1, 1, -1]
 
+// True while the page is in light mode. The starfield recolours to suit it.
+function useLightTheme() {
+  const [light, setLight] = useState(() => document.documentElement.dataset.theme === 'light')
+  useEffect(() => {
+    const observer = new MutationObserver(() => setLight(document.documentElement.dataset.theme === 'light'))
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+    return () => observer.disconnect()
+  }, [])
+  return light
+}
+
 const smoothstep = (t) => t * t * (3 - 2 * t)
 
-// Blend a per-section value at the current (fractional) stage
-function atStage(stage, pick) {
-  const i = Math.min(Math.floor(stage), STAGE_COUNT - 1)
-  const j = Math.min(i + 1, STAGE_COUNT - 1)
+// Blend a per-section value at the current (fractional) stage of a page with `count` sections
+function atStage(stage, count, pick) {
+  const i = Math.min(Math.floor(stage), count - 1)
+  const j = Math.min(i + 1, count - 1)
   return MathUtils.lerp(pick(i), pick(j), smoothstep(stage - i))
 }
 
 function Particles({ count }) {
+  const light = useLightTheme()
   const ref = useRef()
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3)
@@ -80,13 +118,14 @@ function Particles({ count }) {
 
   return (
     <Points ref={ref} positions={positions} stride={3} frustumCulled={false}>
-      <PointMaterial transparent color={BLUE} size={0.035} sizeAttenuation depthWrite={false} opacity={0.8} />
+      <PointMaterial transparent color={light ? STAR_LIGHT : BLUE} size={0.035} sizeAttenuation depthWrite={false} opacity={light ? 0.9 : 0.8} />
     </Points>
   )
 }
 
 // Stars that stream toward the camera between sections. Invisible at the hero.
-function WarpField({ count }) {
+function WarpField({ count, layout }) {
+  const light = useLightTheme()
   const points = useRef()
   const material = useRef()
   const warp = useRef(0)
@@ -101,7 +140,7 @@ function WarpField({ count }) {
   }, [count])
 
   useFrame((_, delta) => {
-    const target = reducedMotion ? 0 : atStage(scrollState.stage, (i) => WARP[i])
+    const target = reducedMotion ? 0 : atStage(scrollState.stage, layout.ids.length, (i) => layout.warp[i])
     warp.current = MathUtils.damp(warp.current, target, 3, delta)
     const visible = warp.current > 0.01
     points.current.visible = visible
@@ -123,19 +162,25 @@ function WarpField({ count }) {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial ref={material} color="#bcd7ff" size={0.045} sizeAttenuation transparent opacity={0} depthWrite={false} />
+      <pointsMaterial ref={material} color={light ? STAR_LIGHT : "#bcd7ff"} size={0.045} sizeAttenuation transparent opacity={0} depthWrite={false} />
     </points>
   )
 }
 
 // Fades and blurs the whole canvas behind the full-width lower sections.
 // Fully off (no filter at all) at the hero and upper sections.
-function Backdrop() {
+// In light mode the dark text needs a calmer background, so every section after
+// the hero gets a medium blur, and the full dim is stronger. The hero is always sharp.
+function Backdrop({ layout }) {
+  const light = useLightTheme()
   const dim = useRef(0)
   const applied = useRef(0)
 
   useFrame((state, delta) => {
-    dim.current = MathUtils.damp(dim.current, atStage(scrollState.stage, (i) => DIM[i]), 4, delta)
+    const target = atStage(scrollState.stage, layout.ids.length, (i) =>
+      light ? (i === 0 ? 0 : Math.max(0.45, layout.dim[i]) * 2) : layout.dim[i],
+    )
+    dim.current = MathUtils.damp(dim.current, target, 4, delta)
     const style = state.gl.domElement.style
 
     // Snap fully off near zero so the hero never keeps a faint blur
@@ -149,14 +194,15 @@ function Backdrop() {
     }
     if (Math.abs(dim.current - applied.current) < 0.005) return
     applied.current = dim.current
-    style.opacity = String(1 - 0.35 * dim.current)
+    // dim runs to 1 in dark mode (4px blur) and to 2 in light mode (8px blur)
+    style.opacity = String(1 - (light ? 0.25 : 0.35) * dim.current)
     style.filter = `blur(${(dim.current * 4).toFixed(2)}px)`
   })
 
   return null
 }
 
-function Shapes() {
+function Shapes({ layout }) {
   const group = useRef()
   const offsets = useRef([])
   const meshes = useRef([])
@@ -182,6 +228,7 @@ function Shapes() {
 
   useFrame((state, delta) => {
     const stage = scrollState.stage
+    const count = layout.ids.length
     const g = group.current
 
     // Fast scrolling whips the shapes around; the kick decays back to zero
@@ -198,7 +245,7 @@ function Shapes() {
     }
 
     const ease = reducedMotion ? 30 : 5
-    const cam = atStage(stage, (i) => CAMERA[i])
+    const cam = atStage(stage, count, (i) => layout.camera[i])
     state.camera.position.z = MathUtils.damp(state.camera.position.z, cam, ease, delta)
 
     base.forEach((b, s) => {
@@ -209,11 +256,11 @@ function Shapes() {
       // Position: blend the section poses, stored as an offset from the hero spot
       // Shapes further back look closer to the centre (perspective), so spread
       // x by depth to keep them at the same spot on screen. Exactly 1 at the hero.
-      const z = atStage(stage, (i) => POSES[i][s][2])
-      const depth = (cam - z) / (CAMERA_Z - POSES[0][s][2])
-      const x = atStage(stage, (i) => POSES[i][s][0]) * edge * depth
-      const y = atStage(stage, (i) => POSES[i][s][1]) * depth
-      const k = atStage(stage, (i) => POSES[i][s][3])
+      const z = atStage(stage, count, (i) => layout.poses[i][s][2])
+      const depth = (cam - z) / (CAMERA_Z - layout.poses[0][s][2])
+      const x = atStage(stage, count, (i) => layout.poses[i][s][0]) * edge * depth
+      const y = atStage(stage, count, (i) => layout.poses[i][s][1]) * depth
+      const k = atStage(stage, count, (i) => layout.poses[i][s][3])
       offset.position.x = MathUtils.damp(offset.position.x, x - b.pos[0], ease, delta)
       offset.position.y = MathUtils.damp(offset.position.y, y - b.pos[1], ease, delta)
       offset.position.z = MathUtils.damp(offset.position.z, z - b.pos[2], ease, delta)
@@ -271,7 +318,12 @@ function Shapes() {
 }
 
 export default function ScrollScene() {
-  useScrollStage()
+  // Work and Contact have their own choreography; every other route uses the home one
+  const { pathname } = useLocation()
+  const layout = pathname.startsWith('/work') ? LAYOUTS.work
+    : pathname.startsWith('/contact') ? LAYOUTS.contact
+    : LAYOUTS.home
+  useScrollStage(layout.ids)
 
   // Match the old hero-sized canvas so the hero is framed exactly as before,
   // but never shorter than the screen so the 3D fills every section.
@@ -282,7 +334,7 @@ export default function ScrollScene() {
     measure()
     window.addEventListener('resize', measure)
     return () => window.removeEventListener('resize', measure)
-  }, [])
+  }, [pathname])
 
   return (
     <div className="scroll-canvas" style={{ height }} aria-hidden="true">
@@ -297,10 +349,10 @@ export default function ScrollScene() {
         <directionalLight position={[5, 5, 5]} intensity={1.2} />
         <pointLight position={[-5, 2, 3]} color={PURPLE} intensity={40} />
         <pointLight position={[5, -3, 3]} color={BLUE} intensity={30} />
-        <Shapes />
+        <Shapes layout={layout} />
         <Particles count={isMobile ? 600 : 1500} />
-        <WarpField count={isMobile ? 250 : 600} />
-        <Backdrop />
+        <WarpField count={isMobile ? 250 : 600} layout={layout} />
+        <Backdrop layout={layout} />
       </Canvas>
     </div>
   )

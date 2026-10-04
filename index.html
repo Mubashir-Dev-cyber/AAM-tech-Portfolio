@@ -9,6 +9,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
     <title>AAM tech — Websites & Digital Solutions</title>
+    <meta name="theme-color" content="#0b0d17" />
+    <script>
+      // Set the theme before first paint so there is no flash of the wrong one
+      try {
+        var c = localStorage.getItem('aam-theme');
+        var light = window.matchMedia('(prefers-color-scheme: light)').matches;
+        document.documentElement.dataset.theme = c === 'light' || c === 'dark' ? c : (light ? 'light' : 'dark');
+      } catch (e) {
+        document.documentElement.dataset.theme = 'dark';
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { company, values } from '../data.js'
 import Reveal from './Reveal.jsx'
 import TiltCard from './TiltCard.jsx'
@@ -19,7 +20,7 @@ export default function About() {
             Every project is tailored — no cookie-cutter templates. We focus on
             what your customers need so your site becomes a tool that grows your business.
           </p>
-          <a href="#contact" className="btn about__cta">Start your project →</a>
+          <Link to="/contact" className="btn about__cta">Start your project →</Link>
         </Reveal>
 
         <div className="about__grid">

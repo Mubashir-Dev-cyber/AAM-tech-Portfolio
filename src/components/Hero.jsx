@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { company, stats } from '../data.js'
 import Reveal from './Reveal.jsx'
 
@@ -13,8 +14,8 @@ export default function Hero() {
         </h1>
         <p className="hero__intro">{company.intro}</p>
         <div className="hero__actions">
-          <a href="#contact" className="btn">Start your project</a>
-          <a href="#work" className="btn btn--ghost">See our work</a>
+          <Link to="/contact" className="btn">Start your project</Link>
+          <Link to="/work" className="btn btn--ghost">See our work</Link>
         </div>
 
         <ul className="hero__stats">

@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
 import { company } from '../data.js'
+import useTheme from '../hooks/useTheme.js'
+import ThemeToggle from './ThemeToggle.jsx'
 
+// Section links point at the home page, so they work from any page
 const links = [
-  { href: '#services', label: 'Services' },
-  { href: '#work', label: 'Work' },
-  { href: '#about', label: 'About' },
-  { href: '#process', label: 'Process' },
+  { to: '/#services', label: 'Services' },
+  { to: '/#about', label: 'About' },
+  { to: '/#process', label: 'Process' },
 ]
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [theme, setTheme] = useTheme()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -22,10 +26,10 @@ export default function Navbar() {
   return (
     <header className={`nav ${scrolled ? 'nav--scrolled' : ''}`}>
       <div className="container nav__inner">
-        <a href="#top" className="nav__logo" onClick={() => setOpen(false)}>
+        <Link to="/" className="nav__logo" onClick={() => setOpen(false)}>
           <span className="nav__mark">A</span>
           {company.name}
-        </a>
+        </Link>
 
         <button
           className="nav__toggle"
@@ -39,14 +43,23 @@ export default function Navbar() {
 
         <nav className={`nav__links ${open ? 'is-open' : ''}`}>
           {links.map((l) => (
-            <a key={l.href} href={l.href} onClick={() => setOpen(false)}>
+            <Link key={l.to} to={l.to} onClick={() => setOpen(false)}>
               {l.label}
-            </a>
+            </Link>
           ))}
-          <a href="#contact" className="btn btn--small" onClick={() => setOpen(false)}>
-            Get a quote
-          </a>
+          <NavLink
+            to="/work"
+            className={({ isActive }) => (isActive ? 'is-active' : undefined)}
+            onClick={() => setOpen(false)}
+          >
+            Work
+          </NavLink>
+          <ThemeToggle value={theme} onChange={setTheme} />
+          <NavLink to="/contact" className="btn btn--small nav__cta--menu" onClick={() => setOpen(false)}>
+            Contact Us
+          </NavLink>
         </nav>
+        <NavLink to="/contact" className="btn btn--small nav__cta--bar">Contact Us</NavLink>
       </div>
     </header>
   )

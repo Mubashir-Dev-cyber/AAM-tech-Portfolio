@@ -1,20 +1,17 @@
 import { useEffect } from 'react'
 
-// Sections in page order. Stage 0 = top of the page (hero), 1 = services, ...
-const SECTION_IDS = ['top', 'services', 'work', 'about', 'process', 'contact']
-export const STAGE_COUNT = SECTION_IDS.length
-
 // Read every frame by the 3D scene. Mutated directly so scrolling never re-renders React.
 export const scrollState = { stage: 0, velocity: 0 }
 
 let anchors = [0]
 let lastY = 0
 
-// Scroll position at which each section is "reached": when its top is 30% down the viewport.
-function measure() {
+// ids are the sections of the current page, in page order. Stage 0 = top of the page.
+// The scroll position for each section is when its top is 30% down the viewport.
+function measure(ids) {
   const vh = window.innerHeight
   const max = Math.max(0, document.documentElement.scrollHeight - vh)
-  anchors = SECTION_IDS.map((id, i) => {
+  anchors = ids.map((id, i) => {
     const el = document.getElementById(id)
     if (i === 0 || !el) return 0
     const top = el.getBoundingClientRect().top + window.scrollY
@@ -39,11 +36,15 @@ function update() {
   scrollState.stage = i + (y - anchors[i]) / (anchors[i + 1] - anchors[i])
 }
 
-export default function useScrollStage() {
+export default function useScrollStage(ids) {
+  // Re-measure whenever the page (and so its section list) changes
+  const key = ids.join(',')
+
   useEffect(() => {
+    const sections = key.split(',')
     lastY = window.scrollY
     const onResize = () => {
-      measure()
+      measure(sections)
       update()
     }
     onResize()
@@ -56,5 +57,5 @@ export default function useScrollStage() {
       window.removeEventListener('resize', onResize)
       ro.disconnect()
     }
-  }, [])
+  }, [key])
 }
