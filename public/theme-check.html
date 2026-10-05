@@ -1,0 +1,66 @@
+<!doctype html>
+<!-- Temporary page: shows why the site opens in light or dark. Safe to delete once the theme works. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Theme check</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body { font: 18px/1.5 system-ui, sans-serif; max-width: 34rem; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+      h1 { font-size: 1.4rem; margin: 0 0 1.25rem; }
+      .row { border: 1px solid #8884; border-radius: 12px; padding: 0.75rem 1rem; margin: 0 0 0.75rem; }
+      .row small { display: block; opacity: 0.7; font-size: 0.8rem; }
+      .row strong { font-size: 1.5rem; letter-spacing: 0.04em; }
+      .advice { border-left: 4px solid #0a74f5; padding: 0.5rem 0.9rem; margin: 1.25rem 0; }
+      button, a.back { font: inherit; font-weight: 600; padding: 0.7rem 1.2rem; border-radius: 999px; border: 0; background: #0163ec; color: #fff; text-decoration: none; display: inline-block; margin: 0 0.5rem 0.5rem 0; cursor: pointer; }
+      a.back { background: transparent; color: inherit; border: 1px solid #8887; }
+    </style>
+  </head>
+  <body>
+    <h1>Theme check</h1>
+
+    <div class="row"><small>Your browser says your device is</small><strong id="device">…</strong></div>
+    <div class="row"><small>Saved choice for this site</small><strong id="saved">…</strong></div>
+    <div class="row"><small>The site will open in</small><strong id="result">…</strong></div>
+
+    <p class="advice" id="advice"></p>
+
+    <button id="reset" type="button">Reset to System</button>
+    <a class="back" href="./">Open the site</a>
+
+    <script>
+      var light = false;
+      try { light = window.matchMedia('(prefers-color-scheme: light)').matches; } catch (e) {}
+      var saved = null;
+      try { saved = localStorage.getItem('aam-theme-choice'); } catch (e) {}
+
+      function show() {
+        try { saved = localStorage.getItem('aam-theme-choice'); } catch (e) { saved = null; }
+        // Same rule as the site's start-up script
+        var opens = saved === 'light' || (saved !== 'dark' && light) ? 'LIGHT' : 'DARK';
+        document.getElementById('device').textContent = light ? 'LIGHT' : 'DARK';
+        document.getElementById('saved').textContent = saved || 'none';
+        document.getElementById('result').textContent = opens;
+
+        var advice;
+        if (saved === 'dark' || saved === 'light') {
+          advice = 'This browser has a saved "' + saved + '" choice, so the site ignores your device. Press "Reset to System", then open the site.';
+        } else if (!light) {
+          advice = 'The browser itself reports DARK. If your phone is set to light, open Chrome → ⋮ menu → Settings → Theme and choose "System default". Then reload this page.';
+        } else {
+          advice = 'Everything is correct here: the site follows your device. If it still opened dark earlier, close all tabs of the site and open it again — an old copy was cached.';
+        }
+        document.getElementById('advice').textContent = advice;
+      }
+
+      document.getElementById('reset').addEventListener('click', function () {
+        try { localStorage.removeItem('aam-theme-choice'); } catch (e) {}
+        show();
+      });
+      show();
+    </script>
+  </body>
+</html>
