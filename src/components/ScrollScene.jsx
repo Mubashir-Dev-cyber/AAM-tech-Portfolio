@@ -6,9 +6,9 @@ import { MathUtils } from 'three'
 import useScrollStage, { scrollState } from '../hooks/useScrollStage.js'
 import Ripple, { rippleEnabled } from './Ripple.jsx'
 
-const PURPLE = '#6d5dfc'
-const BLUE = '#36c2f6'
-const STAR_LIGHT = '#3b3f8f'
+const ROYAL = '#0163ec'
+const BLUE = '#03c1fd'
+const STAR_LIGHT = '#1e3a8a'
 const CAMERA_Z = 7
 const FOV = 50
 
@@ -290,7 +290,7 @@ function Shapes({ layout }) {
         <Drift speed={1.6} rotationIntensity={1.2} floatIntensity={1.5}>
           <mesh ref={ref(0, 'mesh')} position={base[0].pos} scale={base[0].scale}>
             <torusKnotGeometry args={[0.7, 0.24, 160, 32]} />
-            <meshPhysicalMaterial color={PURPLE} metalness={0.6} roughness={0.15} clearcoat={1} clearcoatRoughness={0.1} />
+            <meshPhysicalMaterial color={ROYAL} metalness={0.6} roughness={0.15} clearcoat={1} clearcoatRoughness={0.1} />
           </mesh>
         </Drift>
       </group>
@@ -308,7 +308,7 @@ function Shapes({ layout }) {
         <Drift speed={2} rotationIntensity={2} floatIntensity={1}>
           <mesh ref={ref(2, 'mesh')} position={base[2].pos} scale={base[2].scale}>
             <icosahedronGeometry args={[1, 0]} />
-            <meshPhysicalMaterial color="#8b5cf6" metalness={0.5} roughness={0.2} flatShading clearcoat={1} />
+            <meshPhysicalMaterial color="#009dfa" metalness={0.5} roughness={0.2} flatShading clearcoat={1} />
           </mesh>
         </Drift>
       </group>
@@ -357,7 +357,7 @@ export default function ScrollScene() {
       >
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} intensity={1.2} />
-        <pointLight position={[-5, 2, 3]} color={PURPLE} intensity={40} />
+        <pointLight position={[-5, 2, 3]} color={ROYAL} intensity={40} />
         <pointLight position={[5, -3, 3]} color={BLUE} intensity={30} />
         <Shapes layout={layout} />
         <Particles count={isMobile ? 600 : 1500} />

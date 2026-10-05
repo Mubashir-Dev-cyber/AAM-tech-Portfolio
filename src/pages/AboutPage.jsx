@@ -1,11 +1,8 @@
 import { Link } from 'react-router-dom'
-import { about, company, team } from '../data.js'
+import { about, asset, company, team } from '../data.js'
 import Reveal from '../components/Reveal.jsx'
 import SectionHeader from '../components/SectionHeader.jsx'
 import TiltCard from '../components/TiltCard.jsx'
-
-// Files in /public live under the site's base path ('/AAM-tech-Portfolio/' on GitHub Pages)
-const asset = (path) => import.meta.env.BASE_URL + path.replace(/^\//, '')
 
 // "Jane Doe" -> "JD"
 const initials = (name) =>

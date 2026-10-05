@@ -1,10 +1,13 @@
 // All site content lives here — edit this file to update the portfolio.
 
+// Files in /public live under the site's base path ('/AAM-tech-Portfolio/' on GitHub Pages)
+export const asset = (path) => import.meta.env.BASE_URL + path.replace(/^\//, '')
+
 export const company = {
-  name: 'AAM tech',
+  name: 'AAM Technology',
   tagline: 'We build digital experiences that grow businesses.',
   intro:
-    'AAM tech is a technology and software development company helping businesses, startups, and organizations build a strong digital presence with modern, responsive, and user-friendly websites.',
+    'AAM Technology is a technology and software development company helping businesses, startups, and organizations build a strong digital presence with modern, responsive, and user-friendly websites.',
   email: 'am.pk.tech@gmail.com',
   // Contact form delivery via Formspree (the part after formspree.io/f/).
   // If this is left empty, "Send message" opens the visitor's email app instead.
@@ -13,10 +16,10 @@ export const company = {
   whatsapp: '923192663398',
   // Pre-filled WhatsApp greeting, picked by the page the visitor is on (client can edit it before sending)
   whatsappMessages: {
-    home: "Hi AAM tech! 👋 I found you through your website and I'd love to chat about a project I have in mind.",
-    work: "Hi AAM tech! 👋 I just saw your work on your website — I'd love something like that for my business. Can we talk?",
-    about: "Hi AAM tech! 👋 I was reading about your team on your website and I'd love to chat about a project.",
-    contact: "Hi AAM tech! 👋 I'm on your website's contact page and I'd love to talk about a project. When's a good time?",
+    home: "Hi AAM Technology! 👋 I found you through your website and I'd love to chat about a project I have in mind.",
+    work: "Hi AAM Technology! 👋 I just saw your work on your website — I'd love something like that for my business. Can we talk?",
+    about: "Hi AAM Technology! 👋 I was reading about your team on your website and I'd love to chat about a project.",
+    contact: "Hi AAM Technology! 👋 I'm on your website's contact page and I'd love to talk about a project. When's a good time?",
   },
   location: 'Remote — working with clients worldwide',
   // Office location for the map on the Contact page. The map stays hidden until address or mapEmbed is set.
@@ -129,7 +132,7 @@ export const process = [
 // About page. TODO: rewrite the story and mission in your own words.
 export const about = {
   story: [
-    'AAM tech started with a simple idea: every business deserves a website that works as hard as they do. Too many small companies were stuck with slow, outdated sites — or no site at all.',
+    'AAM Technology started with a simple idea: every business deserves a website that works as hard as they do. Too many small companies were stuck with slow, outdated sites — or no site at all.',
     'Today we design and build websites and web apps for businesses, startups, and organizations around the world. We keep things personal: you talk directly to the people building your project, from the first call to launch day and beyond.',
   ],
   mission:
@@ -147,12 +150,12 @@ export const team = [
   {
     name: 'Muhammad Mubashir',
     photo: '/mubashir.webp',
-    bio: 'Part of the AAM tech team, bringing creative ideas and clean code together to deliver standout digital experiences for clients worldwide.',
+    bio: 'Part of the AAM Technology team, bringing creative ideas and clean code together to deliver standout digital experiences for clients worldwide.',
   },
   {
     name: 'Abdal Niazi',
     photo: '/abdal.webp',
-    bio: 'Part of the AAM tech team, focused on building reliable, well-crafted web experiences for clients around the world.',
+    bio: 'Part of the AAM Technology team, focused on building reliable, well-crafted web experiences for clients around the world.',
   },
 ]
 

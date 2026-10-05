@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { company } from '../data.js'
+import { asset, company } from '../data.js'
 import useTheme from '../hooks/useTheme.js'
 import ThemeToggle from './ThemeToggle.jsx'
 
@@ -31,9 +31,10 @@ export default function Navbar() {
   return (
     <header className={`nav ${scrolled ? 'nav--scrolled' : ''}`}>
       <div className="container nav__inner">
-        <Link to="/" className="nav__logo" onClick={() => setOpen(false)}>
-          <span className="nav__mark">A</span>
-          {company.name}
+        <Link to="/" className="nav__logo" aria-label={company.name} onClick={() => setOpen(false)}>
+          <img className="nav__mark nav__mark--dark" src={asset('logo-mark-dark.png')} alt="" />
+          <img className="nav__mark nav__mark--light" src={asset('logo-mark-light.png')} alt="" />
+          <span className="nav__word">Technology</span>
         </Link>
 
         <button
