@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { company, whatsappLink } from '../data.js'
+import { company } from '../data.js'
 import Reveal from './Reveal.jsx'
-import { WhatsAppIcon } from './WhatsAppButton.jsx'
+import { WhatsAppIcon, WhatsAppLink } from './WhatsAppButton.jsx'
 
 const nextSteps = [
   { title: 'We reply within 24 hours', text: 'A real person reads every message and gets back to you.' },
@@ -62,9 +62,9 @@ export default function Contact() {
             <li><span>Email</span><a href={`mailto:${company.email}`}>{company.email}</a></li>
             <li>
               <span>WhatsApp</span>
-              <a className="contact__whatsapp" href={whatsappLink('contact')} target="_blank" rel="noopener noreferrer">
+              <WhatsAppLink page="contact" className="contact__whatsapp">
                 <WhatsAppIcon /> Chat with us
-              </a>
+              </WhatsAppLink>
             </li>
             <li><span>Location</span>{company.address || company.location}</li>
           </ul>

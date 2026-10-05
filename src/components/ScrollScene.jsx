@@ -61,7 +61,7 @@ const LAYOUTS = {
     dim: [0, 1],
   },
   about: {
-    ids: ['top', 'story', 'team'],
+    ids: ['top', 'team', 'story'],
     poses: [POSES[0], POSES[3], POSES[4]],
     camera: [7, 6.6, 6.6],
     warp: [0, 0, 0],

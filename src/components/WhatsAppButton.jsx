@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom'
-import { whatsappLink } from '../data.js'
+import { whatsappAndroidLink, whatsappLink } from '../data.js'
 
 // Which greeting in data.js to use for the current page
 const pageFor = (pathname) =>
@@ -15,20 +15,26 @@ export function WhatsAppIcon(props) {
   )
 }
 
+// A link that starts a WhatsApp chat. Android goes straight to the app (or the
+// Play Store if it isn't installed); everyone else uses the wa.me link.
+export function WhatsAppLink({ page, ...props }) {
+  const openApp = (e) => {
+    if (!/Android/i.test(navigator.userAgent)) return
+    e.preventDefault()
+    window.location.href = whatsappAndroidLink(page)
+  }
+
+  return <a href={whatsappLink(page)} target="_blank" rel="noopener noreferrer" onClick={openApp} {...props} />
+}
+
 // Floating "chat on WhatsApp" button, bottom-right on every page
 export default function WhatsAppButton() {
   const { pathname } = useLocation()
 
   return (
-    <a
-      className="whatsapp-fab"
-      href={whatsappLink(pageFor(pathname))}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Chat with us on WhatsApp"
-    >
+    <WhatsAppLink page={pageFor(pathname)} className="whatsapp-fab" aria-label="Chat with us on WhatsApp">
       <WhatsAppIcon className="whatsapp-fab__icon" />
       <span className="whatsapp-fab__label">Chat on WhatsApp</span>
-    </a>
+    </WhatsAppLink>
   )
 }

@@ -31,6 +31,32 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section className="section" id="team">
+        <div className="container">
+          <SectionHeader
+            eyebrow="Our team"
+            title="Meet the team"
+            text="The people you'll work with, from the first call to launch day."
+          />
+          <div className="team__grid">
+            {team.map((m, i) => (
+              <Reveal key={`${m.name}-${i}`} index={i}>
+                <TiltCard className="card team__card">
+                  {m.photo ? (
+                    <img className="team__avatar team__avatar--photo" src={asset(m.photo)} alt={m.name} />
+                  ) : (
+                    <div className="team__avatar" aria-hidden="true">{initials(m.name)}</div>
+                  )}
+                  <h3>{m.name}</h3>
+                  {m.role && <p className="team__role">{m.role}</p>}
+                  {m.bio && <p>{m.bio}</p>}
+                </TiltCard>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="section" id="story">
         <div className="container about">
           <Reveal>
@@ -56,32 +82,8 @@ export default function AboutPage() {
             </div>
           </Reveal>
         </div>
-      </section>
 
-      <section className="section" id="team">
         <div className="container">
-          <SectionHeader
-            eyebrow="Our team"
-            title="Meet the team"
-            text="The people you'll work with, from the first call to launch day."
-          />
-          <div className="team__grid">
-            {team.map((m, i) => (
-              <Reveal key={`${m.name}-${i}`} index={i}>
-                <TiltCard className="card team__card">
-                  {m.photo ? (
-                    <img className="team__avatar team__avatar--photo" src={asset(m.photo)} alt={m.name} />
-                  ) : (
-                    <div className="team__avatar" aria-hidden="true">{initials(m.name)}</div>
-                  )}
-                  <h3>{m.name}</h3>
-                  {m.role && <p className="team__role">{m.role}</p>}
-                  {m.bio && <p>{m.bio}</p>}
-                </TiltCard>
-              </Reveal>
-            ))}
-          </div>
-
           <Reveal className="about__closing">
             <h2>Let's build something together</h2>
             <div className="hero__actions">

@@ -10,7 +10,7 @@ export const company = {
   // If this is left empty, "Send message" opens the visitor's email app instead.
   formspreeId: 'mjygblwl',
   // Country code + number, digits only (no +, spaces or leading 0)
-  whatsapp: '923001234567', // TODO: replace with your real WhatsApp number
+  whatsapp: '923192663398',
   // Pre-filled WhatsApp greeting, picked by the page the visitor is on (client can edit it before sending)
   whatsappMessages: {
     home: "Hi AAM tech! 👋 I found you through your website and I'd love to chat about a project I have in mind.",
@@ -30,11 +30,19 @@ export const company = {
   ],
 }
 
-// Opens a WhatsApp chat with the page's greeting pre-filled (app on phones, WhatsApp Web on desktop)
+const whatsappText = (page) => company.whatsappMessages[page] || company.whatsappMessages.home
+
+// Opens a WhatsApp chat with the page's greeting pre-filled
+// (the app on iPhone if installed; WhatsApp desktop or WhatsApp Web on computers)
 export const whatsappLink = (page = 'home') =>
-  `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(
-    company.whatsappMessages[page] || company.whatsappMessages.home,
-  )}`
+  `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(whatsappText(page))}`
+
+// Android: opens the WhatsApp app directly, or the Play Store when it isn't installed
+export const whatsappAndroidLink = (page = 'home') =>
+  `intent://send?phone=${company.whatsapp}&text=${encodeURIComponent(whatsappText(page))}` +
+  `#Intent;scheme=whatsapp;S.browser_fallback_url=${encodeURIComponent(
+    'https://play.google.com/store/apps/details?id=com.whatsapp',
+  )};end`
 
 export const stats = [
   { value: '100%', label: 'Responsive builds' },
