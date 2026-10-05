@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useState } from 'react'
 
 // 'light' | 'dark' | 'system' — system follows the device setting.
-// New visitors start in dark; only a choice made with the switch is saved.
+// New visitors follow the device setting; only a choice made with the switch is saved.
 const KEY = 'aam-theme-choice'
 const query = typeof window !== 'undefined' ? window.matchMedia('(prefers-color-scheme: light)') : null
 
 export function readChoice() {
   try {
     const v = localStorage.getItem(KEY)
-    return v === 'light' || v === 'dark' || v === 'system' ? v : 'dark'
+    return v === 'light' || v === 'dark' || v === 'system' ? v : 'system'
   } catch {
-    return 'dark'
+    return 'system'
   }
 }
 
