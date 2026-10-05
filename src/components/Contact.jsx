@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { company } from '../data.js'
 import Reveal from './Reveal.jsx'
 import { WhatsAppIcon, WhatsAppLink } from './WhatsAppButton.jsx'
@@ -9,19 +9,60 @@ const nextSteps = [
   { title: 'Proposal & quote', text: 'A clear plan, timeline and fixed price — no surprises.' },
 ]
 
+// Formspree's free plan allows 50 messages a month, so each browser may send
+// at most LIMIT messages per 24 hours. This lives in the visitor's browser, so it
+// stops casual repeat sending; a determined person could still get round it.
+const LIMIT = 2
+const DAY = 24 * 60 * 60 * 1000
+const SENT_KEY = 'aam-contact-sent'
+
+const recentSends = () => {
+  try {
+    const times = JSON.parse(localStorage.getItem(SENT_KEY)) || []
+    return times.filter((t) => Date.now() - t < DAY)
+  } catch {
+    return []
+  }
+}
+
+const rememberSend = () => {
+  try {
+    localStorage.setItem(SENT_KEY, JSON.stringify([...recentSends(), Date.now()]))
+  } catch {
+    // Storage blocked: no limit, but sending still works
+  }
+}
+
+const emptyForm = { name: '', email: '', phone: '', message: '', _gotcha: '' }
+
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', message: '', _gotcha: '' })
+  const [form, setForm] = useState(emptyForm)
   const [status, setStatus] = useState('idle') // 'idle' | 'sending' | 'sent' | 'error'
+  const [limited, setLimited] = useState(() => recentSends().length >= LIMIT)
+  // Bots fill in and send forms instantly; people take more than a few seconds
+  const openedAt = useRef(Date.now())
 
   const update = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
   const submit = async (e) => {
     e.preventDefault()
 
+    if (recentSends().length >= LIMIT) {
+      setLimited(true)
+      return
+    }
+
+    // Too fast to be a person: pretend it worked so the bot learns nothing
+    if (Date.now() - openedAt.current < 3000) {
+      setStatus('sent')
+      return
+    }
+
     // No Formspree form yet: open the visitor's email client with the message pre-filled
     if (!company.formspreeId) {
       const subject = encodeURIComponent(`Project enquiry from ${form.name}`)
-      const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${form.email})`)
+      const contact = form.phone ? `${form.email}, ${form.phone}` : form.email
+      const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${contact})`)
       window.location.href = `mailto:${company.email}?subject=${subject}&body=${body}`
       return
     }
@@ -35,8 +76,10 @@ export default function Contact() {
         body: JSON.stringify({ ...form, _subject: `Project enquiry from ${form.name}` }),
       })
       if (!res.ok) throw new Error(`Formspree responded ${res.status}`)
-      setForm({ name: '', email: '', message: '', _gotcha: '' })
+      rememberSend()
+      setForm(emptyForm)
       setStatus('sent')
+      setLimited(recentSends().length >= LIMIT)
     } catch {
       setStatus('error')
     }
@@ -73,15 +116,40 @@ export default function Contact() {
         <Reveal as="form" className="form" index={1} onSubmit={submit}>
           <label>
             Name
-            <input name="name" value={form.name} onChange={update} required placeholder="Your name" />
+            <input name="name" value={form.name} onChange={update} required maxLength={80} placeholder="Your name" />
           </label>
           <label>
             Email
             <input type="email" name="email" value={form.email} onChange={update} required placeholder="you@example.com" />
           </label>
           <label>
+            <span>
+              Phone / WhatsApp <span className="form__hint">(optional)</span>
+            </span>
+            <input
+              type="tel"
+              name="phone"
+              value={form.phone}
+              onChange={update}
+              autoComplete="tel"
+              inputMode="tel"
+              pattern="[0-9+ \(\)\-]{7,20}"
+              title="Numbers only, e.g. +92 300 1234567"
+              placeholder="+92 300 1234567"
+            />
+          </label>
+          <label>
             Project details
-            <textarea name="message" rows="5" value={form.message} onChange={update} required placeholder="What would you like to build?" />
+            <textarea
+              name="message"
+              rows="5"
+              value={form.message}
+              onChange={update}
+              required
+              minLength={20}
+              maxLength={2000}
+              placeholder="What would you like to build? A few lines about your business and goals helps."
+            />
           </label>
           {/* Hidden from people; bots that fill it in are dropped by Formspree */}
           <input
@@ -94,7 +162,7 @@ export default function Contact() {
             aria-hidden="true"
             className="form__trap"
           />
-          <button className="btn" type="submit" disabled={status === 'sending'}>
+          <button className="btn" type="submit" disabled={status === 'sending' || limited}>
             {status === 'sending' ? 'Sending…' : 'Send message'}
           </button>
           <p className={`form__status form__status--${status}`} role="status" aria-live="polite">
@@ -106,6 +174,13 @@ export default function Contact() {
               </>
             )}
           </p>
+          {limited && (
+            <p className="form__status form__status--limit">
+              You've sent us {LIMIT} messages today. Thank you, we'll reply soon! For anything urgent, email{' '}
+              <a href={`mailto:${company.email}`}>{company.email}</a> or{' '}
+              <WhatsAppLink page="contact">message us on WhatsApp</WhatsAppLink>.
+            </p>
+          )}
         </Reveal>
       </div>
     </section>

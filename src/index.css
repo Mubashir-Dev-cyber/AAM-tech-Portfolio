@@ -627,7 +627,10 @@ main { overflow-x: clip; }
 .form__status { margin: 0; font-size: 0.9rem; }
 .form__status:empty { display: none; }
 .form__status--sent,
-.form__status--error { padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid; }
+.form__status--error,
+.form__status--limit { padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid; }
+.form__status--limit { color: var(--primary-2); background: rgba(3, 193, 253, 0.08); border-color: rgba(3, 193, 253, 0.35); }
+.form__hint { color: var(--muted); font-weight: 400; }
 .form__status--sent { color: #4ade80; background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.35); }
 .form__status--error { color: #f87171; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.35); }
 .form__status a { color: inherit; text-decoration: underline; }
