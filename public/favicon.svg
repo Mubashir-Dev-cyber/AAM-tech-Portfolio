@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>AAM Technology</title>
+  <rect width="64" height="64" rx="14" fill="#0B1F3A"/>
+  <g transform="translate(9 14) scale(0.3833)">
+    <polygon points="4,92 35.6,14 40.4,14 72,92 57,92 38,45 19,92" fill="#FFFFFF"/>
+    <polygon points="48,92 79.6,14 84.4,14 116,92 101,92 82,45 63,92" fill="#2CC8C5" stroke="#0B1F3A" stroke-width="8" paint-order="stroke"/>
+  </g>
+</svg>
