@@ -11,7 +11,13 @@ export const company = {
   formspreeId: 'mjygblwl',
   // Country code + number, digits only (no +, spaces or leading 0)
   whatsapp: '923001234567', // TODO: replace with your real WhatsApp number
-  whatsappMessage: "Hi AAM tech, I'd like to discuss a project.",
+  // Pre-filled WhatsApp greeting, picked by the page the visitor is on (client can edit it before sending)
+  whatsappMessages: {
+    home: "Hi AAM tech! 👋 I found you through your website and I'd love to chat about a project I have in mind.",
+    work: "Hi AAM tech! 👋 I just saw your work on your website — I'd love something like that for my business. Can we talk?",
+    about: "Hi AAM tech! 👋 I was reading about your team on your website and I'd love to chat about a project.",
+    contact: "Hi AAM tech! 👋 I'm on your website's contact page and I'd love to talk about a project. When's a good time?",
+  },
   location: 'Remote — working with clients worldwide',
   // Office location for the map on the Contact page. The map stays hidden until address or mapEmbed is set.
   address: '', // e.g. 'Street, City, Country' — shown on the page and used for the map if mapEmbed is empty
@@ -24,9 +30,11 @@ export const company = {
   ],
 }
 
-// Opens a WhatsApp chat with the greeting pre-filled (app on phones, WhatsApp Web on desktop)
-export const whatsappLink = () =>
-  `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(company.whatsappMessage)}`
+// Opens a WhatsApp chat with the page's greeting pre-filled (app on phones, WhatsApp Web on desktop)
+export const whatsappLink = (page = 'home') =>
+  `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(
+    company.whatsappMessages[page] || company.whatsappMessages.home,
+  )}`
 
 export const stats = [
   { value: '100%', label: 'Responsive builds' },

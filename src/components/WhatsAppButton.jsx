@@ -1,4 +1,9 @@
+import { useLocation } from 'react-router-dom'
 import { whatsappLink } from '../data.js'
+
+// Which greeting in data.js to use for the current page
+const pageFor = (pathname) =>
+  ['work', 'about', 'contact'].find((page) => pathname.startsWith(`/${page}`)) || 'home'
 
 // The WhatsApp glyph, drawn in currentColor so it can be reused at any size
 export function WhatsAppIcon(props) {
@@ -12,10 +17,12 @@ export function WhatsAppIcon(props) {
 
 // Floating "chat on WhatsApp" button, bottom-right on every page
 export default function WhatsAppButton() {
+  const { pathname } = useLocation()
+
   return (
     <a
       className="whatsapp-fab"
-      href={whatsappLink()}
+      href={whatsappLink(pageFor(pathname))}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"

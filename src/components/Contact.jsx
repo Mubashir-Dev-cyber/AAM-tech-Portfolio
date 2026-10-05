@@ -62,7 +62,7 @@ export default function Contact() {
             <li><span>Email</span><a href={`mailto:${company.email}`}>{company.email}</a></li>
             <li>
               <span>WhatsApp</span>
-              <a className="contact__whatsapp" href={whatsappLink()} target="_blank" rel="noopener noreferrer">
+              <a className="contact__whatsapp" href={whatsappLink('contact')} target="_blank" rel="noopener noreferrer">
                 <WhatsAppIcon /> Chat with us
               </a>
             </li>
