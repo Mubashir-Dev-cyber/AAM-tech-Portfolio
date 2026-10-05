@@ -66,7 +66,7 @@ export default function Contact() {
                 <WhatsAppIcon /> Chat with us
               </a>
             </li>
-            <li><span>Location</span>{company.location}</li>
+            <li><span>Location</span>{company.address || company.location}</li>
           </ul>
         </Reveal>
 

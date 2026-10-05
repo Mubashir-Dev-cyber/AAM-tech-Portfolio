@@ -13,6 +13,10 @@ export const company = {
   whatsapp: '923001234567', // TODO: replace with your real WhatsApp number
   whatsappMessage: "Hi AAM tech, I'd like to discuss a project.",
   location: 'Remote — working with clients worldwide',
+  // Office location for the map on the Contact page. The map stays hidden until address or mapEmbed is set.
+  address: '', // e.g. 'Street, City, Country' — shown on the page and used for the map if mapEmbed is empty
+  mapEmbed: '', // Google Maps → Share → "Embed a map" → the src="https://www.google.com/maps/embed?pb=…" link
+  mapLink: '', // Any Google Maps link to your place (e.g. https://maps.app.goo.gl/…) for the "Open in Google Maps" button
   socials: [
     { label: 'GitHub', href: 'https://github.com/' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/' },

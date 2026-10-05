@@ -1,4 +1,5 @@
 import Contact from '../components/Contact.jsx'
+import LocationMap from '../components/LocationMap.jsx'
 
 export default function ContactPage() {
   return (
@@ -15,6 +16,7 @@ export default function ContactPage() {
         </div>
       </section>
       <Contact />
+      <LocationMap />
     </>
   )
 }

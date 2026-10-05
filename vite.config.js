@@ -4,9 +4,10 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // GitHub Pages serves the site from /<repo>/, so the build needs that base path.
-// Dev keeps / so the local preview works as before.
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? '/AAM-tech-Portfolio/' : '/',
+// `npm run preview` uses it too, so it serves dist/ exactly like GitHub Pages.
+// Dev keeps / so the local dev server works as before.
+export default defineConfig(({ command, isPreview }) => ({
+  base: command === 'build' || isPreview ? '/AAM-tech-Portfolio/' : '/',
   plugins: [
     react(),
     {
