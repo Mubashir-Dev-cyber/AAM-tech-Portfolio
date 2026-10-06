@@ -16,6 +16,11 @@ const LIMIT = 2
 const DAY = 24 * 60 * 60 * 1000
 const SENT_KEY = 'aam-contact-sent'
 
+// One line isn't enough to quote from, so the message needs at least this many words.
+// A word must contain a letter or number (any language), so "- - - -" doesn't count.
+const MIN_WORDS = 40
+const countWords = (text) => text.split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length
+
 const recentSends = () => {
   try {
     const times = JSON.parse(localStorage.getItem(SENT_KEY)) || []
@@ -41,6 +46,7 @@ export default function Contact() {
   const [limited, setLimited] = useState(() => recentSends().length >= LIMIT)
   // Bots fill in and send forms instantly; people take more than a few seconds
   const openedAt = useRef(Date.now())
+  const words = countWords(form.message)
 
   const update = (e) => {
     e.target.setCustomValidity('') // clear any message from invalid() once they edit the field
@@ -53,7 +59,8 @@ export default function Contact() {
     const digits = form.phone.replace(/\D/g, '').length
     const problems = [
       ['name', !form.name.trim() && 'Please enter your name.'],
-      ['message', form.message.trim().length < 20 && 'Please tell us a little more (at least 20 characters).'],
+      ['message', words < MIN_WORDS &&
+        `Please tell us a bit more about your project (at least ${MIN_WORDS} words — you have ${words}).`],
       ['phone', form.phone.trim() && (digits < 7 || digits > 15) && 'Please enter a valid phone number, e.g. +92 300 1234567.'],
     ]
     for (const [name, problem] of problems) {
@@ -171,10 +178,18 @@ export default function Contact() {
               value={form.message}
               onChange={update}
               required
-              minLength={20}
               maxLength={2000}
-              placeholder="What would you like to build? A few lines about your business and goals helps."
+              aria-describedby="message-count"
+              placeholder={`Tell us about your business, what you'd like built and any deadlines (at least ${MIN_WORDS} words).`}
             />
+            {/* Read out with the box via aria-describedby, not on every keystroke */}
+            <span
+              id="message-count"
+              className={`form__count${words >= MIN_WORDS ? ' form__count--ok' : ''}`}
+              aria-hidden="true"
+            >
+              {words >= MIN_WORDS ? `${words} words ✓` : `${words} / ${MIN_WORDS} words`}
+            </span>
           </label>
           {/* Hidden from people; bots that fill it in are dropped by Formspree */}
           <input
