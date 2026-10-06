@@ -18,7 +18,7 @@ const SENT_KEY = 'aam-contact-sent'
 
 // One line isn't enough to quote from, so the message needs at least this many words.
 // A word must contain a letter or number (any language), so "- - - -" doesn't count.
-const MIN_WORDS = 40
+const MIN_WORDS = 10
 const countWords = (text) => text.split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length
 
 const recentSends = () => {
