@@ -26,10 +26,11 @@ export const company = {
   address: '', // e.g. 'Street, City, Country' — shown on the page and used for the map if mapEmbed is empty
   mapEmbed: '', // Google Maps → Share → "Embed a map" → the src="https://www.google.com/maps/embed?pb=…" link
   mapLink: '', // Any Google Maps link to your place (e.g. https://maps.app.goo.gl/…) for the "Open in Google Maps" button
+  // Paste each page's link between the quotes. Empty ones are hidden from the footer.
   socials: [
-    { label: 'GitHub', href: 'https://github.com/' },
-    { label: 'LinkedIn', href: 'https://www.linkedin.com/' },
-    { label: 'Instagram', href: 'https://www.instagram.com/' },
+    { label: 'GitHub', href: '' },
+    { label: 'LinkedIn', href: '' },
+    { label: 'Instagram', href: '' },
   ],
 }
 
@@ -87,6 +88,7 @@ export const services = [
 ]
 
 // TODO: replace these sample projects with your real work.
+// `link` is the live website (https://…). Leave it empty and "View project" is hidden.
 export const projects = [
   {
     title: 'Bloom Café',
@@ -94,7 +96,7 @@ export const projects = [
     text: 'A warm, mobile-first site with an online menu, table booking, and Google Maps integration.',
     tags: ['React', 'Responsive', 'SEO'],
     gradient: 'linear-gradient(135deg, #ff9a8b, #ff6a88)',
-    link: '#',
+    link: '',
   },
   {
     title: 'Nova Store',
@@ -102,7 +104,7 @@ export const projects = [
     text: 'A fast online storefront with product filtering, cart, and secure checkout.',
     tags: ['E-commerce', 'Payments', 'Performance'],
     gradient: 'linear-gradient(135deg, #6d5dfc, #36c2f6)',
-    link: '#',
+    link: '',
   },
   {
     title: 'Peak Fitness',
@@ -110,7 +112,7 @@ export const projects = [
     text: 'A high-converting landing page with class schedules and membership sign-up.',
     tags: ['Landing page', 'Animations', 'Forms'],
     gradient: 'linear-gradient(135deg, #34d399, #0ea5e9)',
-    link: '#',
+    link: '',
   },
   {
     title: 'Clarity Dashboard',
@@ -118,7 +120,7 @@ export const projects = [
     text: 'An internal analytics dashboard that turns raw business data into clear charts.',
     tags: ['Web app', 'Charts', 'Dashboard'],
     gradient: 'linear-gradient(135deg, #f7b733, #fc4a1a)',
-    link: '#',
+    link: '',
   },
 ]
 

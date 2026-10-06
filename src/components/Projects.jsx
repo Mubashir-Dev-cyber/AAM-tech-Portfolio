@@ -29,7 +29,11 @@ export default function Projects() {
                   <ul className="tags">
                     {p.tags.map((t) => <li key={t}>{t}</li>)}
                   </ul>
-                  <a href={p.link} className="project__link">View project →</a>
+                  {/^https?:\/\//.test(p.link) && (
+                    <a href={p.link} className="project__link" target="_blank" rel="noopener noreferrer">
+                      View project →
+                    </a>
+                  )}
                 </div>
               </TiltCard>
             </Reveal>

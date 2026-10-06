@@ -11,6 +11,7 @@ import ScrollToTop from './components/ScrollToTop.jsx'
 import Work from './pages/Work.jsx'
 import AboutPage from './pages/AboutPage.jsx'
 import WhatsAppButton from './components/WhatsAppButton.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
 
 // three.js is large — load it in its own chunk so the text renders first
 const ScrollScene = lazy(() => import('./components/ScrollScene.jsx'))
@@ -33,9 +34,12 @@ export default function App() {
       <div className="page-glow" aria-hidden="true">
         <div className="hero__glow" />
       </div>
-      <Suspense fallback={null}>
-        <ScrollScene />
-      </Suspense>
+      {/* The 3D is decoration: if it can't load, the page carries on without it */}
+      <ErrorBoundary>
+        <Suspense fallback={null}>
+          <ScrollScene />
+        </Suspense>
+      </ErrorBoundary>
       <ScrollToTop />
       <Navbar />
       <main>

@@ -42,10 +42,35 @@ export default function Contact() {
   // Bots fill in and send forms instantly; people take more than a few seconds
   const openedAt = useRef(Date.now())
 
-  const update = (e) => setForm({ ...form, [e.target.name]: e.target.value })
+  const update = (e) => {
+    e.target.setCustomValidity('') // clear any message from invalid() once they edit the field
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  // The browser's own checks let spaces-only text and numbers like "+++++++" through.
+  // Returns the first field that is still not good enough, after showing the reason on it.
+  const invalid = (formEl) => {
+    const digits = form.phone.replace(/\D/g, '').length
+    const problems = [
+      ['name', !form.name.trim() && 'Please enter your name.'],
+      ['message', form.message.trim().length < 20 && 'Please tell us a little more (at least 20 characters).'],
+      ['phone', form.phone.trim() && (digits < 7 || digits > 15) && 'Please enter a valid phone number, e.g. +92 300 1234567.'],
+    ]
+    for (const [name, problem] of problems) {
+      if (!problem) continue
+      const field = formEl.elements[name]
+      field.setCustomValidity(problem)
+      field.reportValidity()
+      return field
+    }
+    return null
+  }
 
   const submit = async (e) => {
     e.preventDefault()
+
+    // Nothing is sent (or counted towards the daily limit) until the details are real
+    if (invalid(e.currentTarget)) return
 
     if (recentSends().length >= LIMIT) {
       setLimited(true)

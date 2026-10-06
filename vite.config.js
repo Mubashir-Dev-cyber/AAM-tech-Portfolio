@@ -3,6 +3,9 @@ import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// The site's routes (see src/App.jsx), other than the home page
+const PAGES = ['about', 'work', 'contact']
+
 // GitHub Pages serves the site from /<repo>/, so the build needs that base path.
 // `npm run preview` uses it too, so it serves dist/ exactly like GitHub Pages.
 // Dev keeps / so the local dev server works as before.
@@ -11,11 +14,14 @@ export default defineConfig(({ command, isPreview }) => ({
   plugins: [
     react(),
     {
-      // GitHub Pages has no rewrites, so a refresh on /work returns 404.
-      // Serving index.html as 404.html lets the router render the page anyway.
+      // GitHub Pages has no rewrites, so a refresh on /work would return 404.
+      // work.html etc. make the real pages load with a proper 200 status (so Google
+      // indexes them and link previews work); 404.html catches any other URL.
       name: 'github-pages-spa-fallback',
       closeBundle() {
-        copyFileSync(resolve('dist', 'index.html'), resolve('dist', '404.html'))
+        for (const page of [...PAGES, '404']) {
+          copyFileSync(resolve('dist', 'index.html'), resolve('dist', `${page}.html`))
+        }
       },
     },
   ],

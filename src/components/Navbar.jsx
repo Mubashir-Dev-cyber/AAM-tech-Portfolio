@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { asset, company } from '../data.js'
 import useTheme from '../hooks/useTheme.js'
 import ThemeToggle from './ThemeToggle.jsx'
@@ -21,12 +21,25 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [theme, setTheme] = useTheme()
 
+  const { pathname, hash, key } = useLocation()
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
     onScroll()
-    window.addEventListener('scroll', onScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Close the phone menu on any page change (including the browser's Back button)
+  useEffect(() => setOpen(false), [pathname, hash, key])
+
+  // ...and when Escape is pressed
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => e.key === 'Escape' && setOpen(false)
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open])
 
   return (
     <header className={`nav ${scrolled ? 'nav--scrolled' : ''}`}>

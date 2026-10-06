@@ -11,7 +11,8 @@ export default function ScrollToTop() {
     if (target) {
       target.scrollIntoView()
     } else {
-      window.scrollTo(0, 0)
+      // Instant, so a new page doesn't appear mid-way and then glide up (the CSS uses smooth scrolling)
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
     }
   }, [pathname, hash, key])
 
